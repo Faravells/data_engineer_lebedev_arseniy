@@ -14,3 +14,14 @@ CREATE TABLE log (
 
   FOREIGN KEY (event_id) REFERENCES event(event_id)
 );
+
+INSERT INTO event (event_name)
+VALUES
+  ('first_visit'),
+  ('registration'),
+  ('login'),
+  ('logout'),
+  ('create_topic'),
+  ('visit_topic'),
+  ('delete_topic'),
+  ('write_message');
