@@ -13,5 +13,13 @@ services:
       test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$ROOT_PASSWORD']
       timeout: 5s
       retries: 5
+  data-generator:
+    build: .
+    environment:
+      ROOT_PASSWORD: ${ROOT_PASSWORD}
+      DATABASE_PORT: ${DATABASE_PORT}
+    depends_on:
+      mysql:
+        condition: service_healthy
 volumes:
   db_data:
