@@ -26,6 +26,8 @@ services:
     environment:
       ROOT_PASSWORD: ${ROOT_PASSWORD}
       DATABASE_PORT: ${DATABASE_PORT}
+    volumes:
+      - ./output.csv:/app/output.csv
     depends_on:
       mysql:
         condition: service_healthy
