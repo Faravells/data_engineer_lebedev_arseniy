@@ -54,6 +54,7 @@ df3['Процентное изменение количества тем на ф
 df3.drop(columns=['daily_forum_gain', 'forum_amount'], inplace=True)
 df3 = df3[(df3['День'] >= date_start.date()) & (df3['День'] <= date_end.date())]
 result = result.merge(df3, on='День', how='outer')
+result['День'] = pd.to_datetime(result['День']).dt.strftime('%d.%m.%Y')
 
 pd.DataFrame(result).to_csv("output.csv", index=False, encoding='utf-8-sig')
 logging.error(f"{len(result)} строк успешно экспортировано в выходной файл")
