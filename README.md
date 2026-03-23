@@ -5,6 +5,7 @@
 - cd {папка, в которую поместим работу}
 - git clone https://github.com/Faravells/data_engineer_lebedev_arseniy
 - cd data_engineer_lebedev_arseniy
+- Создаем в папке файл .env и добавляем в него переменные ROOT_PASSWORD и DATABASE_PORT, например "ROOT_PASSWORD='root'\nDATABASE_PORT='3306'"
 - При надобности изменить период расчета агрегации, свои значения можно вписать в data-aggregator/date-interval.txt
 - docker-compose up
 - После запуска и отработки скриптов, выходные данные будут в файле output.csv
