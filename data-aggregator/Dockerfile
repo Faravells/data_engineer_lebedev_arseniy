@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 WORKDIR /app
-RUN pip install mysql-connector-python==9.6.0
-RUN pip install pandas==3.0.1
+COPY requirements.txt .
+RUN pip install -r requirements.txt --no-cache-dir
 COPY data-aggregator.py date-interval.txt .
 CMD python data-aggregator.py
