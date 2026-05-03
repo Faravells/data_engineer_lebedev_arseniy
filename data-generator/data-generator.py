@@ -76,25 +76,29 @@ def generate_logs(day, max_forum_id, max_user_id):
         })
     return logs, max_forum_id, max_user_id
 
-connection = None
-try:
-    connection = mysql.connector.connect(host='mysql', user='root', password=os.getenv('ROOT_PASSWORD'),
-                                         database='user_logs', port=os.getenv('DATABASE_PORT'))
-    logging.error("Генератор данных подключен к базе данных")
-except mysql.connector.Error as e:
-    logging.error(f"Генератору данных не удалось подключиться к базе данных: {e}")
+def main():
+    connection = None
+    try:
+        connection = mysql.connector.connect(host='mysql', user='root', password=os.getenv('ROOT_PASSWORD'),
+                                             database='user_logs', port=os.getenv('DATABASE_PORT'))
+        logging.error("Генератор данных подключен к базе данных")
+    except mysql.connector.Error as e:
+        logging.error(f"Генератору данных не удалось подключиться к базе данных: {e}")
+    
+    insert_query = ("""INSERT INTO log (user_id, event_id, description, forum_id, status, time)
+                    VALUES (%s, %s, %s, %s, %s, %s)""")
+    days = 31
+    max_forum_id = 50000
+    max_user_id = 500000
+    for i in range(1, days + 1):
+        logs, max_forum_id, max_user_id = generate_logs(i, max_forum_id, max_user_id)
+        cursor = connection.cursor()
+        for log in logs:
+            cursor.execute(insert_query, (log['user_id'], log['event_id'], log['desc'], log['forum_id'], log['status'], log['time']))
+        connection.commit()
+        logging.error(f"Созданы логи за {i} день")
+    connection.close()
+    logging.error("Создание логов завершено")
 
-insert_query = ("""INSERT INTO log (user_id, event_id, description, forum_id, status, time)
-                VALUES (%s, %s, %s, %s, %s, %s)""")
-days = 31
-max_forum_id = 50000
-max_user_id = 500000
-for i in range(1, days + 1):
-    logs, max_forum_id, max_user_id = generate_logs(i, max_forum_id, max_user_id)
-    cursor = connection.cursor()
-    for log in logs:
-        cursor.execute(insert_query, (log['user_id'], log['event_id'], log['desc'], log['forum_id'], log['status'], log['time']))
-    connection.commit()
-    logging.error(f"Созданы логи за {i} день")
-connection.close()
-logging.error("Создание логов завершено")
+if __name__ == '__main__':
+    main()
